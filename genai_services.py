@@ -109,6 +109,7 @@
 
 #     return call_llm(messages)
 import os
+import sqlite3
 from typing import List
 import google.generativeai as genai
 from dotenv import load_dotenv
