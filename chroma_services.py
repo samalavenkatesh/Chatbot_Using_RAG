@@ -42,29 +42,24 @@
 #     else:
 #         return []
 
-import sys
-import os
+ import os
 from dotenv import load_dotenv
-
-# Patch SQLite import using your sqlite_patch.py
-import sqlite_patch  # This will handle the sqlite3 -> pysqlite3 replacement if needed
-
 import chromadb
 
 load_dotenv(dotenv_path=".env")
-# Initialize ChromaDB client
-chroma_client = chromadb.PersistentClient(path="./chroma_db")
+
+# Use a running Chroma server instead of local sqlite storage
+chroma_client = chromadb.HttpClient(host="localhost", port=8000)
+
 collection = chroma_client.get_or_create_collection(
     name=os.getenv("CHROMA_COLLECTION_NAME")
 )
 
-
 def ingest_documents(docs):
-    """Ingest documents into ChromaDB using 'all-MiniLM-L6-v2' Sentence Transformer"""
+    """Ingest documents into ChromaDB"""
     ids = [f"chunk_{i}" for i in range(len(docs))]
     collection.add(documents=docs, ids=ids)
     return len(docs)
-
 
 def query_documents(query_text, n_results=3):
     """Query the collection for relevant documents"""
@@ -73,3 +68,4 @@ def query_documents(query_text, n_results=3):
         return results['documents'][0]
     else:
         return []
+
