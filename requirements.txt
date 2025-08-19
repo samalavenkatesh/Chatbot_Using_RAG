@@ -4,4 +4,4 @@ tiktoken
 chromadb>=0.3.23
 markitdown[all]
 google-generativeai
-
+pysqlite3
