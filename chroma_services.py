@@ -52,7 +52,6 @@ import sqlite_patch  # This will handle the sqlite3 -> pysqlite3 replacement if 
 import chromadb
 
 load_dotenv(dotenv_path=".env")
-
 # Initialize ChromaDB client
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(
