@@ -1,4 +1,6 @@
+import sqlite_patch  
 import streamlit as st
+
 
 st.set_page_config(page_title="RAG QnA & Summarization Chatbot", layout="wide")
 

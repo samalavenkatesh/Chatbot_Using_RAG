@@ -43,24 +43,17 @@
 #         return []
 
 import sys
-import sqlite3
-
-# Ensure correct sqlite version is being used
-print("Using sqlite version:", sqlite3.sqlite_version)
-
-# Patch: if chroma tries to import pysqlite3, force it to use stdlib sqlite3
-try:
-    import pysqlite3
-    sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
-except ImportError:
-    pass
-
-import chromadb
 import os
 from dotenv import load_dotenv
 
+# Patch SQLite import using your sqlite_patch.py
+import sqlite_patch  # This will handle the sqlite3 -> pysqlite3 replacement if needed
+
+import chromadb
+
 load_dotenv(dotenv_path=".env")
 
+# Initialize ChromaDB client
 chroma_client = chromadb.PersistentClient(path="./chroma_db")
 collection = chroma_client.get_or_create_collection(
     name=os.getenv("CHROMA_COLLECTION_NAME")
@@ -81,4 +74,3 @@ def query_documents(query_text, n_results=3):
         return results['documents'][0]
     else:
         return []
-
